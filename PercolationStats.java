@@ -11,22 +11,22 @@ import edu.princeton.cs.algs4.StdStats;
 public class PercolationStats {
 
     private int numOfTrials;
-    private int threshold;
-    private int[] trialResults;
+    private double threshold;
+    private double[] trialResults;
     private double mean;
     private double stddev;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
         // array to hold results of all the trials
-        trialResults = new int[trials];
+        trialResults = new double[trials];
         numOfTrials = trials;
 
         for (int i = 0; i < trials; i++) {
             // after every trial, we create a new percolation object
             Percolation perc = new Percolation(n);
             // keep opening new sites until percolation occurs and store this threshold
-            for (int numOfSitesOpened = 1; numOfSitesOpened <= n; numOfSitesOpened++) {
+            for (double numOfSitesOpened = 1; numOfSitesOpened <= (n * n); numOfSitesOpened++) {
                 perc.open(StdRandom.uniform(1, n + 1), StdRandom.uniform(1, n + 1));
                 if (perc.percolates()) {
                     threshold = numOfSitesOpened / (n * n);
