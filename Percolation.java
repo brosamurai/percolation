@@ -12,7 +12,7 @@ public class Percolation {
     private boolean percolationPossible = false;
     private WeightedQuickUnionUF unionMap;
     private int sizeOfUnionFindObject;
-    private int totalOpenSites = 0;
+    public int totalOpenSites = 0;
 
     // creates n-by-n grid, with all sites intially blocked
     public Percolation(int n) {
