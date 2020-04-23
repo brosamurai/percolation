@@ -9,10 +9,8 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     // 0 - blocked/full; 1 - empty
     private int[][] grid;
-    private boolean percolationPossible = false;
     private WeightedQuickUnionUF unionMap;
     private int sizeOfUnionFindObject;
-    public int totalOpenSites = 0;
 
     // creates n-by-n grid, with all sites intially blocked
     public Percolation(int n) {
@@ -29,7 +27,11 @@ public class Percolation {
 
     // opens the site (row,col) if it is not open already
     public void open(int row, int col) {
-        grid[row - 1][col - 1] = 1;
+        if (!isOpen(row, col)) {
+            grid[row - 1][col - 1] = 1;
+            // if any adjacent sites are open, connect em
+            checkAdjacentSites(unionMap, row, col);
+        }
     }
 
     // is the site at (row,col) open?
@@ -50,24 +52,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        // setup the union-find data structure
-        unionFindStuff();
-
-        return percolationPossible;
-    }
-
-    private void unionFindStuff() {
-        for (int i = 1; i <= grid.length; i++) {
-            for (int j = 1; j <= grid.length; j++) {
-                if (isOpen(i, j)) {
-                    totalOpenSites++;
-                    checkAdjacentSites(unionMap, i, j);
-                }
-            }
-        }
-
-        if (unionMap.find(0) == unionMap.find(sizeOfUnionFindObject - 1))
-            percolationPossible = true;
+        return unionMap.find(0) == unionMap.find(sizeOfUnionFindObject - 1);
     }
 
     private void checkAdjacentSites(WeightedQuickUnionUF unionFind, int i, int j) {
@@ -106,9 +91,10 @@ public class Percolation {
         }
     }
 
-    // find the index of the element that corresponds to our site within the grid
+    // find the index of the element that corresponds to our site within the grid.
+    // We're converting from a 2D grid to a 1D array (the unionFind object)
     private int rowAndColToIndex(int row, int col) {
-        return ((row - 1) * grid.length) + (col - 1);
+        return ((row - 1) * grid.length) + (col - 1) + 1;
     }
 
     // test client (optional)
