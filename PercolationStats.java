@@ -7,7 +7,8 @@
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.Stopwatch;
+
+import java.util.InputMismatchException;
 
 public class PercolationStats {
 
@@ -19,6 +20,12 @@ public class PercolationStats {
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
+        if (n <= 0 || trials <= 0) {
+            IllegalArgumentException ex = new IllegalArgumentException(
+                    "input must be greater than 0");
+            throw ex;
+        }
+
         // array to hold results of all the trials
         trialResults = new double[trials];
         numOfTrials = trials;
@@ -73,12 +80,23 @@ public class PercolationStats {
 
     // test client
     public static void main(String[] args) {
-        int sizeOfGrid = StdIn.readInt();
-        int numOfTrials = StdIn.readInt();
-        Stopwatch timer = new Stopwatch();
-        System.out.println("Elapsed Time 1: " + String.valueOf(timer.elapsedTime()));
+        int sizeOfGrid = 0;
+        int numOfTrials = 0;
+        try {
+            sizeOfGrid = StdIn.readInt();
+            numOfTrials = StdIn.readInt();
+            if (sizeOfGrid <= 0 || numOfTrials <= 0) {
+                IllegalArgumentException expection = new IllegalArgumentException(
+                        "Inputs must be greater than zero!");
+                throw expection;
+            }
+        }
+        catch (InputMismatchException expection) {
+            System.out.println("Only integers are allowed as inputs!");
+            return;
+        }
+
         PercolationStats perc = new PercolationStats(sizeOfGrid, numOfTrials);
-        System.out.println("Elapsed Time 2: " + String.valueOf(timer.elapsedTime()));
         double myMean = perc.mean();
         double myStddev = perc.stddev();
         double myConfidenceHi = perc.confidenceHi();
