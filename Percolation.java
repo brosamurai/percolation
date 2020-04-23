@@ -52,7 +52,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return unionMap.find(0) == unionMap.find(sizeOfUnionFindObject - 1);
+        return unionMap.find(0) == unionMap.find(sizeOfUnionFindObject - 2);
     }
 
     private void checkAdjacentSites(WeightedQuickUnionUF unionFind, int i, int j) {
@@ -64,7 +64,7 @@ public class Percolation {
             unionFind.union(siteIndexA, siteIndexB);
         }
         // if we're on the last row, link site to virtual finish site
-        else if (i == grid.length) {
+        else if (i == grid.length && unionFind.find(siteIndexA) == 0) {
             unionFind.union(siteIndexA, sizeOfUnionFindObject - 1);
         }
 
