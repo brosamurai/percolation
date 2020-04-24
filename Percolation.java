@@ -11,6 +11,7 @@ public class Percolation {
     private final WeightedQuickUnionUF unionMap;
     private final WeightedQuickUnionUF unionMapForFullness;
     private final int sizeOfUnionFindObject;
+    private int numOfSitesOpened = 0;
 
     // creates n-by-n grid, with all sites intially blocked
     public Percolation(int n) {
@@ -35,6 +36,7 @@ public class Percolation {
         }
         if (!isOpen(row, col)) {
             grid[row - 1][col - 1] = true;
+            numOfSitesOpened++;
             // if any adjacent sites are open, connect em
             checkAdjacentSites(row, col);
         }
@@ -63,7 +65,7 @@ public class Percolation {
 
     // returns number of open sites in grid
     public int numberOfOpenSites() {
-        return unionMap.count();
+        return numOfSitesOpened;
     }
 
     // does the system percolate?

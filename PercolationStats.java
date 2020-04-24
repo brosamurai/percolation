@@ -8,8 +8,6 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-import java.util.InputMismatchException;
-
 public class PercolationStats {
 
     private final int numOfTrials;
@@ -17,6 +15,7 @@ public class PercolationStats {
     private final double[] trialResults;
     private double mean;
     private double stddev;
+    private final double confidence95 = 1.96;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
@@ -69,12 +68,12 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        double confidenceLo = mean - ((1.96 * stddev) / Math.sqrt(numOfTrials));
+        double confidenceLo = mean - ((confidence95 * stddev) / Math.sqrt(numOfTrials));
         return confidenceLo;
     }
 
     public double confidenceHi() {
-        double confidenceHi = mean + ((1.96 * stddev) / Math.sqrt(numOfTrials));
+        double confidenceHi = mean + ((confidence95 * stddev) / Math.sqrt(numOfTrials));
         return confidenceHi;
     }
 
@@ -91,7 +90,7 @@ public class PercolationStats {
                 throw expection;
             }
         }
-        catch (InputMismatchException expection) {
+        catch (IllegalArgumentException expection) {
             System.out.println("Only integers are allowed as inputs!");
             return;
         }
