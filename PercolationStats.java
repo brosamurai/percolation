@@ -45,7 +45,7 @@ public class PercolationStats {
                 // open the blocked site
                 perc.open(randomRow, randomCol);
                 // if the system percolates now, calculate the threshold
-                if (numOfSitesOpened > n && perc.percolates()) {
+                if (perc.percolates()) {
                     threshold = numOfSitesOpened / (n * n);
                     break;
                 }
