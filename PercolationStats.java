@@ -12,9 +12,9 @@ import java.util.InputMismatchException;
 
 public class PercolationStats {
 
-    private int numOfTrials;
+    private final int numOfTrials;
     private double threshold;
-    private double[] trialResults;
+    private final double[] trialResults;
     private double mean;
     private double stddev;
 

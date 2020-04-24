@@ -7,10 +7,10 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int[][] grid;
-    private WeightedQuickUnionUF unionMap;
-    private WeightedQuickUnionUF unionMapForFullness;
-    private int sizeOfUnionFindObject;
+    private boolean[][] grid;
+    private final WeightedQuickUnionUF unionMap;
+    private final WeightedQuickUnionUF unionMapForFullness;
+    private final int sizeOfUnionFindObject;
 
     // creates n-by-n grid, with all sites intially blocked
     public Percolation(int n) {
@@ -19,7 +19,7 @@ public class Percolation {
                     "input must be greater than 0!");
             throw expection;
         }
-        grid = new int[n][n];
+        grid = new boolean[n][n];
         // +2 for virtual top and bottom sites
         sizeOfUnionFindObject = grid.length * grid.length + 2;
         unionMap = new WeightedQuickUnionUF(sizeOfUnionFindObject);
@@ -34,7 +34,7 @@ public class Percolation {
             throw expection;
         }
         if (!isOpen(row, col)) {
-            grid[row - 1][col - 1] = 1;
+            grid[row - 1][col - 1] = true;
             // if any adjacent sites are open, connect em
             checkAdjacentSites(row, col);
         }
@@ -47,7 +47,7 @@ public class Percolation {
                     "input must be greater than 0");
             throw ex;
         }
-        return grid[row - 1][col - 1] == 1;
+        return grid[row - 1][col - 1];
     }
 
     // is the site at (row,col) full?
@@ -115,10 +115,5 @@ public class Percolation {
     // We're converting from a 2D grid to a 1D array (the unionFind object)
     private int rowAndColToIndex(int row, int col) {
         return ((row - 1) * grid.length) + (col - 1) + 1;
-    }
-
-    // test client (optional)
-    public static void main(String[] args) {
-
     }
 }
