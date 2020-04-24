@@ -7,9 +7,9 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    // 0 - blocked/full; 1 - empty
     private int[][] grid;
     private WeightedQuickUnionUF unionMap;
+    private WeightedQuickUnionUF unionMapForFullness;
     private int sizeOfUnionFindObject;
 
     // creates n-by-n grid, with all sites intially blocked
@@ -23,6 +23,7 @@ public class Percolation {
         // +2 for virtual top and bottom sites
         sizeOfUnionFindObject = grid.length * grid.length + 2;
         unionMap = new WeightedQuickUnionUF(sizeOfUnionFindObject);
+        unionMapForFullness = new WeightedQuickUnionUF(grid.length * grid.length + 1);
     }
 
     // opens the site (row,col) if it is not open already
@@ -35,7 +36,7 @@ public class Percolation {
         if (!isOpen(row, col)) {
             grid[row - 1][col - 1] = 1;
             // if any adjacent sites are open, connect em
-            checkAdjacentSites(unionMap, row, col);
+            checkAdjacentSites(row, col);
         }
     }
 
@@ -57,7 +58,7 @@ public class Percolation {
             throw ex;
         }
         int index = rowAndColToIndex(row, col);
-        return unionMap.find(0) == unionMap.find(index);
+        return unionMapForFullness.find(0) == unionMapForFullness.find(index);
     }
 
     // returns number of open sites in grid
@@ -67,42 +68,46 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return unionMap.find(0) == unionMap.find(sizeOfUnionFindObject - 2);
+        return unionMap.find(0) == unionMap.find(sizeOfUnionFindObject - 1);
     }
 
-    private void checkAdjacentSites(WeightedQuickUnionUF unionFind, int i, int j) {
+    private void checkAdjacentSites(int i, int j) {
         int siteIndexA = rowAndColToIndex(i, j);
 
         // Check site to bottom
         if (i < grid.length && isOpen(i + 1, j)) {
             int siteIndexB = rowAndColToIndex(i + 1, j);
-            unionFind.union(siteIndexA, siteIndexB);
+            unionMap.union(siteIndexA, siteIndexB);
+            unionMapForFullness.union(siteIndexA, siteIndexB);
         }
-        // if we're on the last row, link site to virtual finish site
-        else if (i == grid.length && unionFind.find(siteIndexA) == 0) {
-            unionFind.union(siteIndexA, sizeOfUnionFindObject - 1);
+        else if (i == grid.length) {
+            unionMap.union(siteIndexA, sizeOfUnionFindObject - 1);
         }
 
         // Check site to top
         if (i > 1 && isOpen(i - 1, j)) {
             int siteIndexB = rowAndColToIndex(i - 1, j);
-            unionFind.union(siteIndexA, siteIndexB);
+            unionMap.union(siteIndexA, siteIndexB);
+            unionMapForFullness.union(siteIndexA, siteIndexB);
         }
         // if we're on the first row, link open sites to virtual start site
         else if (i == 1) {
-            unionFind.union(siteIndexA, 0);
+            unionMap.union(siteIndexA, 0);
+            unionMapForFullness.union(siteIndexA, 0);
         }
 
         // Check site to left
         if (j > 1 && isOpen(i, j - 1)) {
             int siteIndexB = rowAndColToIndex(i, j - 1);
-            unionFind.union(siteIndexA, siteIndexB);
+            unionMap.union(siteIndexA, siteIndexB);
+            unionMapForFullness.union(siteIndexA, siteIndexB);
         }
 
         // Check site to right
         if (j < grid.length && isOpen(i, j + 1)) {
             int siteIndexB = rowAndColToIndex(i, j + 1);
-            unionFind.union(siteIndexA, siteIndexB);
+            unionMap.union(siteIndexA, siteIndexB);
+            unionMapForFullness.union(siteIndexA, siteIndexB);
         }
     }
 
@@ -114,5 +119,6 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
+
     }
 }
