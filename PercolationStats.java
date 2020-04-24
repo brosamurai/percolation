@@ -9,13 +9,12 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-
+    private static double confidence95 = 1.96;
     private final int numOfTrials;
     private double threshold;
     private final double[] trialResults;
     private double mean;
     private double stddev;
-    private final double confidence95 = 1.96;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
